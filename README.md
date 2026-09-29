@@ -9,7 +9,7 @@
 
 English | [简体中文](README.zh-CN.md)
 
-> **This project is looking for contributors.** OfficePro is a working, usable app, but it is a solo-developer project with a large single-file UI and limited tests. If you are good at Electron, front-end architecture, file-format parsing, or testing, your help would be very welcome. See [Help wanted](#help-wanted) and open a discussion / pull request.
+> **This project is looking for contributors.** OfficePro is a working, usable app, but it is a solo-developer project with a large single-file UI and limited tests. If you are good at Electron, front-end architecture, file-format parsing, or testing, your help would be very welcome. See [Help wanted](#-help-wanted) and open a [discussion](https://github.com) / pull request.
 
 ---
 

@@ -157,7 +157,7 @@
       if(slidesData && Array.isArray(slidesData)){
         slideTexts=slidesData;
       } else if(content){
-        try{ slideTexts=JSON.parse(content); } catch(e){ slideTexts=[content]; }
+        try{ slideTexts=JSON.parse(content); }catch(e){ slideTexts=[content]; }
       }
       if(!slideTexts.length){ showToast('演示内容为空'); return; }
       if(typeof slides !== 'undefined'){

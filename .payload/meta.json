@@ -1,9 +1,0 @@
-{
-  "parts": 60,
-  "chunk": 10000,
-  "gzB64Len": 600000,
-  "gzBytes": 449999,
-  "rawBytes": 1799754,
-  "fileCount": 25,
-  "sha256gz": "b339ddf70365e6be80d16762581ce9376372a308c19414b5afcfb82cc669215c"
-}

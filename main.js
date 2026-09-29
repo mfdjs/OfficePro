@@ -53,7 +53,7 @@ function createWindow() {
   mainWindow.webContents.on('will-navigate', (event, navUrl) => {
     try {
       if (navUrl && navUrl.toLowerCase().startsWith('file:///')) {
-        let fp = decodeURIComponent(navUrl.replace(/^file:\/\//, ''));
+        let fp = decodeURIComponent(navUrl.replace(/^file:\/\/\//, ''));
         fp = fp.replace(/\//g, path.sep);
         const ext = path.extname(fp).toLowerCase();
         const dragOk = ['.doc','.docx','.docm','.dotx','.wps','.wpt','.dot','.xls','.xlsx','.xlsm','.et','.csv','.tsv','.ods','.ppt','.pptx','.dps','.ppsx','.pdf','.txt','.md','.rtf','.odt','.odp','.epub','.mobi','.html','.htm','.json','.xml','.log','.sql','.jpg','.jpeg','.png','.bmp','.gif','.webp','.svg','.tif','.tiff'];
@@ -256,7 +256,7 @@ ipcMain.handle('pdf-to-excel', async (event, filePath) => {
 ipcMain.handle('pdf-to-ppt', async (event, filePath) => {
   try {
     const dataBuffer = fs.readFileSync(filePath);
-    const data = await pdfParse(data);
+    const data = await pdfParse(dataBuffer);
     const text = data.text;
     const pages = text.split(/\f/);
     let htmlContent = '';
@@ -286,7 +286,7 @@ ipcMain.handle('word-to-pdf', async (event, htmlContent) => {
     const fullHtml = `<!DOCTYPE html><html><head><meta charset="UTF-8"><style>
       body { font-family: 'Microsoft YaHei', SimSun, sans-serif; margin: 40px; line-height: 1.8; font-size: 14px; }
       h1 { font-size: 24px; font-weight: bold; margin: 20px 0 10px; }
-      h2 { font-size: 20px font-weight: bold; margin: 16px 0 8px; }
+      h2 { font-size: 20px; font-weight: bold; margin: 16px 0 8px; }
       h3 { font-size: 16px; font-weight: bold; margin: 12px 0 6px; }
       p { margin: 8px 0; }
       table { border-collapse: collapse; width: 100%; margin: 10px 0; }

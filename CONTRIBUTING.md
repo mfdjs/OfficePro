@@ -12,7 +12,7 @@ Before opening an issue, please search existing issues to avoid duplicates. When
 
 - What you did (clear steps to reproduce)
 - What you expected to happen
-- What you actually happened (screenshots or the full error text are very helpful)
+- What actually happened (screenshots or the full error text are very helpful)
 - The file type involved (e.g. `.docx`, `.xlsx`, `.pdf`)
 - Your OS and OfficePro version
 - Any console / DevTools error output

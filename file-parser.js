@@ -166,7 +166,7 @@ function plainTextToHtml(text) {
 }
 
 const CP1252_FORWARD = {0x80:0x20AC,0x82:0x201A,0x83:0x192,0x84:0x201E,0x85:0x2026,0x86:0x2020,0x87:0x2021,0x88:0x2C6,0x89:0x2030,0x8A:0x160,0x8B:0x2039,0x8C:0x152,0x8E:0x17D,0x91:0x2018,0x92:0x2019,0x93:0x201C,0x94:0x201D,0x95:0x2022,0x96:0x2013,0x97:0x2014,0x98:0x2DC,0x99:0x2122,0x9A:0x161,0x9B:0x203A,0x9C:0x153,0x9E:0x17E,0x9F:0x178};
-const CP1252_REV = {}; Object.keys(CP122_FORWARD).forEach(b=>{ CP1252_REV[CP1252_FORWARD[b]] = Number(b); });
+const CP1252_REV = {}; Object.keys(CP1252_FORWARD).forEach(b=>{ CP1252_REV[CP1252_FORWARD[b]] = Number(b); });
 function cjkCountOf(s){ return (String(s).match(/[一-鿿]/g)||[]).length; }
 
 function repairCp1252Gbk(text) {
@@ -263,16 +263,16 @@ async function parseOds(buf) {
   const sheets = {}, names = [];
   const tables = xml.match(/<table:table[\s\S]*?<\/table:table>/g) || [];
   tables.forEach((tb, idx) => {
-    const nm = (tb.match(/table:name="([^"]*)"/||[])[1] || ('Sheet'+(idx+1));
+    const nm = (tb.match(/table:name="([^"]*)"/)||[])[1] || ('Sheet'+(idx+1));
     const rows = [];
     const trs = tb.match(/<table:table-row[\s\S]*?<\/table:table-row>/g) || [];
     trs.forEach(tr => {
       const cells = [];
       const tds = tr.match(/<table:table-cell[\s\S]*?<\/table:table-cell>/g) || [];
       tds.forEach(td => {
-        const repeat = +((td.match(/table:number-columns-repeated="(\d+)"/||[])[1]||1);
+        const repeat = +((td.match(/table:number-columns-repeated="(\d+)"/)||[])[1]||1);
         let v = (td.match(/<text:p[^>]*>([\s\S]*?)<\/text:p>/g)||[]).map(s=>s.replace(/<[^>]+>/g,'')).join(' ');
-        if (v === '') v = (td.match(/office:value="([^"]*)"/||[])[1]||'';
+        if (v === '') v = (td.match(/office:value="([^"]*)"/)||[])[1]||'';
         for (let r=0;r<Math.min(repeat,50);r++) cells.push(v);
       });
       if (cells.some(c=>c!=='')) rows.push(cells.join('\t'));
@@ -492,7 +492,7 @@ function listTar(buf) {
     const type = String.fromCharCode(header[156]);
     if (name) {
       count++; if(type!=='5') total += size;
-      rows.push('<div><span style="width:110px;display:inline-block;color:#888;text-align:right">'+(type==='5'?'—':humanSize(size))+'</span> '+(type==='5'?'📁':'📄')+' '+escapeHtml(name)+'</div>';
+      rows.push('<div><span style="width:110px;display:inline-block;color:#888;text-align:right">'+(type==='5'?'—':humanSize(size))+'</span> '+(type==='5'?'📁':'📄')+' '+escapeHtml(name)+'</div>');
     }
     off += 512 + Math.ceil(size/512)*512;
   }
@@ -514,7 +514,7 @@ function parseEml(raw) {
     const parts = body.split('--'+bm[1]);
     for (const p of parts) {
       const pm = p.match(/Content-Type:\s*([^;\r\n]+)/i);
-      const cte = (p.match(/Content-Transfer-Encoding:\s*\S+/i)||[])[1]||'';
+      const cte = (p.match(/Content-Transfer-Encoding:\s*(\S+)/i)||[])[1]||'';
       const pBody = p.replace(/^[\s\S]*?\r?\n\r?\n/,'');
       const decoded = cte.toLowerCase()==='base64' ? safeB64ToText(pBody) : cte.toLowerCase()==='quoted-printable' ? decodeQP(pBody) : pBody;
       if (pm && /text\/html/i.test(pm[1])) htmlBody = decoded;
@@ -527,7 +527,7 @@ function parseEml(raw) {
   }
   const attaches = [];
   const am = text.match(/Content-Disposition:[^;]*;\s*filename="?([^"\r\n;]+)"?/gi)||[];
-  am.forEach(a=>{const m=a.match(/filename="?([^"\r\n;]+)"?/i);if(m)attaches.push(decodeMimeWords(m[1]));});
+  am.forEach(a=>{const m=a.match(/filename="?([^";\r\n]+)"?/i);if(m)attaches.push(decodeMimeWords(m[1]));});
   let h = '<div style="border:1px solid #e3e6eb;border-radius:8px;padding:14px 18px;margin-bottom:14px;background:#fafbfc;line-height:1.9">';
   h += '<div><b>主题：</b>'+escapeHtml(getH('Subject')||'(无主题)')+'</div>';
   h += '<div><b>发件人：</b>'+escapeHtml(getH('From'))+'</div>';
@@ -599,7 +599,7 @@ function parseFont(buf, ext) {
   h += '<h3 style="margin:.2em 0 .6em">'+escapeHtml(info.family)+(info.subfamily?' '+escapeHtml(info.subfamily):'')+'</h3>';
   if(info.full) h+='<div><b>完整名称：</b>'+escapeHtml(info.full)+'</div>';
   if(info.version) h+='<div><b>版本：</b>'+escapeHtml(info.version)+'</div>';
-  if(info.designer) h+='<div><b>设计师：</b>'+escapeHtml(info.designer)</div>';
+  if(info.designer) h+='<div><b>设计师：</b>'+escapeHtml(info.designer)+'</div>';
   if(info.vendor) h+='<div><b>厂商：</b>'+escapeHtml(info.vendor)+'</div>';
   h += '<div><b>文件大小：</b>'+humanSize(buf.length)+'</div>';
 
@@ -702,7 +702,7 @@ async function parseFile(filePath) {
         const texts = [];
         for (const k of pageKeys) {
           const x = await zip.files[k].async('string');
-          const t = (x.match(/<Glyphs[^>]*UnicodeString="([^"]*)"/g)||[]).map(m=>(m.match(/UnicodeString="([^"]*)"/||[])[1]||'').join('');
+          const t = (x.match(/<Glyphs[^>]*UnicodeString="([^"]*)"/g)||[]).map(m=>(m.match(/UnicodeString="([^"]*)"/)||[])[1]||'').join('');
           texts.push(t);
         }
         return wordHtml(pre(texts.join('\n\n——————\n\n'), false), fileName, fileSize, {warning:'xps'});
@@ -842,7 +842,7 @@ async function parseFile(filePath) {
         const opf = await zip.files[opfPath].async('string');
         const manifest = {};
         (opf.match(/<item[^>]*>/g)||[]).forEach(item=>{
-          const id=(item.match(/id="([^"]*)"/||[])[1], href=(item.match(/href="([^"]*)"/||[])[1];
+          const id=(item.match(/id="([^"]*)"/)||[])[1], href=(item.match(/href="([^"]*)"/)||[])[1];
           if(id&&href) manifest[id]=href;
         });
         const base = path.posix.dirname(opfPath.replace(/\\/g,'/'));

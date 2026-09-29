@@ -1,0 +1,262 @@
+{
+  "name": "officepro",
+  "version": "3.0.0",
+  "description": "OfficePro 专业办公套件",
+  "main": "main.js",
+  "author": "OfficePro",
+  "license": "MIT",
+  "scripts": {
+    "start": "electron .",
+    "build": "electron-builder --win --x64"
+  },
+  "build": {
+    "asar": false,
+    "appId": "com.officepro.desktop",
+    "productName": "OfficePro",
+    "directories": {
+      "output": "dist"
+    },
+    "files": [
+      "index.html",
+      "main.js",
+      "preload.js",
+      "file-parser.js",
+      "officepro-enhance.js",
+      "icon.png",
+      "tessdata/**/*",
+      "node_modules/**/*",
+      "package.json"
+    ],
+    "asarUnpack": [
+      "node_modules/**/*",
+      "tessdata/**/*"
+    ],
+    "fileAssociations": [
+      {
+        "ext": [
+          "doc",
+          "docx",
+          "docm",
+          "dotx",
+          "dotm",
+          "dot",
+          "wps",
+          "wpt",
+          "odt",
+          "ott",
+          "rtf",
+          "pages"
+        ],
+        "name": "OfficePro文字文档",
+        "description": "文字处理文档",
+        "icon": "icon.ico"
+      },
+      {
+        "ext": [
+          "xls",
+          "xlsx",
+          "xlsm",
+          "xlsb",
+          "xlt",
+          "xltx",
+          "xltm",
+          "et",
+          "ods",
+          "ots",
+          "csv",
+          "tsv",
+          "numbers",
+          "dif",
+          "prn"
+        ],
+        "name": "OfficePro表格",
+        "description": "电子表格",
+        "icon": "icon.ico"
+      },
+      {
+        "ext": [
+          "ppt",
+          "pptx",
+          "pptm",
+          "pps",
+          "ppsx",
+          "pot",
+          "potx",
+          "dps",
+          "dpt",
+          "odp",
+          "key"
+        ],
+        "name": "OfficePro演示",
+        "description": "演示文稿",
+        "icon": "icon.ico"
+      },
+      {
+        "ext": [
+          "pdf",
+          "xps",
+          "oxps"
+        ],
+        "name": "OfficePro PDF",
+        "description": "PDF文档",
+        "mimeType": "application/pdf",
+        "icon": "icon.ico"
+      },
+      {
+        "ext": [
+          "epub",
+          "mobi",
+          "azw",
+          "azw3",
+          "fb2"
+        ],
+        "name": "OfficePro电子书",
+        "description": "电子书",
+        "icon": "icon.ico"
+      },
+      {
+        "ext": [
+          "txt",
+          "md",
+          "markdown",
+          "json",
+          "xml",
+          "yaml",
+          "yml",
+          "toml",
+          "ini",
+          "conf",
+          "log",
+          "sql",
+          "html",
+          "htm",
+          "css",
+          "js",
+          "ts",
+          "py",
+          "java",
+          "cpp",
+          "c",
+          "h",
+          "cs",
+          "go",
+          "rs",
+          "rb",
+          "php",
+          "sh",
+          "bat",
+          "ps1",
+          "vue"
+        ],
+        "name": "OfficePro文本",
+        "description": "文本与源代码",
+        "icon": "icon.ico"
+      },
+      {
+        "ext": [
+          "jpg",
+          "jpeg",
+          "png",
+          "bmp",
+          "gif",
+          "webp",
+          "tiff",
+          "tif",
+          "svg",
+          "ico",
+          "avif",
+          "heic"
+        ],
+        "name": "OfficePro图片",
+        "description": "图片文件",
+        "icon": "icon.ico"
+      },
+      {
+        "ext": [
+          "zip",
+          "jar",
+          "tar",
+          "gz",
+          "7z",
+          "rar",
+          "xmind",
+          "vsdx",
+          "eml",
+          "msg",
+          "ttf",
+          "otf",
+          "woff",
+          "woff2"
+        ],
+        "name": "OfficePro归档/其它",
+        "description": "压缩包、邮件、字体",
+        "icon": "icon.ico"
+      },
+      {
+        "ext": [
+          "mp3",
+          "wav",
+          "flac",
+          "aac",
+          "ogg",
+          "m4a",
+          "mp4",
+          "mkv",
+          "avi",
+          "mov",
+          "webm",
+          "wmv"
+        ],
+        "name": "OfficePro媒体",
+        "description": "音视频",
+        "icon": "icon.ico"
+      }
+    ],
+    "win": {
+      "target": [
+        {
+          "target": "nsis",
+          "arch": [
+            "x64"
+          ]
+        },
+        {
+          "target": "portable",
+          "arch": [
+            "x64"
+          ]
+        }
+      ],
+      "icon": "icon.png",
+      "forceCodeSigning": false,
+      "signAndEditExecutable": false,
+      "verifyUpdateCodeSignature": false
+    },
+    "nsis": {
+      "oneClick": false,
+      "allowToChangeInstallationDirectory": true,
+      "createDesktopShortcut": true,
+      "createStartMenuShortcut": true,
+      "shortcutName": "OfficePro",
+      "installerIcon": "icon.ico",
+      "uninstallerIcon": "icon.ico",
+      "installerHeaderIcon": "icon.ico"
+    },
+    "portable": {
+      "artifactName": "OfficePro-Portable-${version}.exe"
+    }
+  },
+  "devDependencies": {
+    "electron": "^22.3.27",
+    "electron-builder": "^24.9.1"
+  },
+  "dependencies": {
+    "docx": "^9.7.1",
+    "jszip": "^3.10.1",
+    "mammoth": "^1.12.2",
+    "pdf-parse": "^1.1.1",
+    "tesseract.js": "^4.1.1",
+    "word-extractor": "^1.0.4",
+    "xlsx": "^0.18.5"
+  }
+}

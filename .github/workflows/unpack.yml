@@ -27,17 +27,20 @@ jobs:
           node-version: 20
 
       - name: Unpack payload
-        run: node scripts/unpack-payload.mjs
+        id: unpack
+        run: |
+          OUT=$(node scripts/unpack-payload.mjs)
+          echo "$OUT"
+          if echo "$OUT" | grep -q "^OK:"; then
+            echo "ready=true" >> "$GITHUB_OUTPUT"
+          fi
 
       - name: Commit unpacked files
+        if: steps.unpack.outputs.ready == 'true'
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           rm -rf .payload
           git add -A
-          if git diff --cached --quiet; then
-            echo "No changes to commit"
-          else
-            git commit -m "Unpack source files from payload"
-            git push
-          fi
+          git commit -m "Unpack source files from payload"
+          git push

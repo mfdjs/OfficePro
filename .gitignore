@@ -1,0 +1,28 @@
+# Dependencies
+node_modules/
+
+# Build output
+dist/
+build/
+
+# Tesseract OCR language data (downloaded separately, see README)
+tessdata/
+
+# Local test samples & diagnostics
+diag-open/
+
+# Debug logs & temp files
+debug-logs/
+*.log
+*.tmp
+*.bak
+
+# Local screenshots
+_s*.png
+shot*.png
+
+# OS / editor
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/

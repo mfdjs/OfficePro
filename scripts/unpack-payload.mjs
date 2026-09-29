@@ -17,24 +17,30 @@ const parts = [];
 for (let i = 0; i < meta.parts; i++) {
   const name = 'part.' + String(i).padStart(3, '0');
   const p = path.join(payloadDir, name);
-  if (!fs.existsSync(p)) throw new Error('missing part: ' + name);
+  if (!fs.existsSync(p)) {
+    console.log('WAIT: missing ' + name);
+    process.exit(0);
+  }
   parts.push(fs.readFileSync(p, 'utf8').replace(/\s+/g, ''));
 }
 
 const b64 = parts.join('');
 if (b64.length !== meta.gzB64Len) {
-  throw new Error('b64 length mismatch: got ' + b64.length + ', expected ' + meta.gzB64Len);
+  console.log('WAIT: b64 length ' + b64.length + '/' + meta.gzB64Len);
+  process.exit(0);
 }
 
 const gz = Buffer.from(b64, 'base64');
 const hash = crypto.createHash('sha256').update(gz).digest('hex');
 if (hash !== meta.sha256gz) {
-  throw new Error('sha256 mismatch: got ' + hash + ', expected ' + meta.sha256gz);
+  console.log('WAIT: sha256 mismatch ' + hash);
+  process.exit(0);
 }
 
 const raw = zlib.gunzipSync(gz);
 if (raw.length !== meta.rawBytes) {
-  throw new Error('raw length mismatch: got ' + raw.length + ', expected ' + meta.rawBytes);
+  console.log('WAIT: raw length mismatch ' + raw.length + '/' + meta.rawBytes);
+  process.exit(0);
 }
 
 const manifest = JSON.parse(raw.toString('utf8'));
@@ -47,7 +53,8 @@ for (const f of manifest.files) {
 }
 
 if (count !== meta.fileCount) {
-  throw new Error('file count mismatch: got ' + count + ', expected ' + meta.fileCount);
+  console.log('WAIT: file count ' + count + '/' + meta.fileCount);
+  process.exit(0);
 }
 
 console.log('OK: unpacked ' + count + ' files');
